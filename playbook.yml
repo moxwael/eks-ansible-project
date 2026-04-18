@@ -4,7 +4,7 @@
   tasks:
 
   # =========================
-  # Kubernetes Deployment
+  # Kubernetes (EKS Deploy)
   # =========================
 
   - name: Apply Kubernetes Deployment
@@ -12,6 +12,23 @@
 
   - name: Apply Kubernetes Service
     command: kubectl apply -f service.yaml
+
+
+  # =========================
+  # SNS Setup (Email Alert)
+  # =========================
+
+  - name: Create SNS topic
+    command: >
+      aws sns create-topic
+      --name ec2-alert-topic
+
+  - name: Subscribe email to SNS topic
+    command: >
+      aws sns subscribe
+      --topic-arn arn:aws:sns:us-east-1:548049827719:ec2-alert-topic
+      --protocol email
+      --notification-endpoint midowael.allam@gmail.com
 
 
   # =========================
@@ -33,11 +50,11 @@
 
 
   # =========================
-  # EventBridge Target (SNS)
+  # EventBridge Target -> SNS
   # =========================
 
-  - name: Add SNS target to EventBridge rule
+  - name: Attach SNS target to EventBridge rule
     command: >
       aws events put-targets
       --rule ec2-create-rule
-      --targets "Id"="1","Arn"="arn:aws:sns:us-east-1:548049827719:ec2-topic"
+      --targets "Id"="1","Arn"="arn:aws:sns:us-east-1:548049827719:ec2-alert-topic"

@@ -36,7 +36,7 @@
   # EventBridge Target (SNS)
   # =========================
 
-  - name: Add SNS target to EventBridge rule (optional)
+  - name: Add SNS target to EventBridge rule
     command: >
       aws events put-targets
       --rule ec2-create-rule

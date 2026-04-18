@@ -1,0 +1,18 @@
+- hosts: localhost
+  tasks:
+
+  - name: Apply deployment
+    copy:
+      src: deployment.yaml
+      dest: /tmp/deployment.yaml
+
+  - name: Apply service
+    copy:
+      src: service.yaml
+      dest: /tmp/service.yaml
+
+  - name: Create deployment
+    command: kubectl apply -f /tmp/deployment.yaml
+
+  - name: Create service
+    command: kubectl apply -f /tmp/service.yaml
